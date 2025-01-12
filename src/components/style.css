@@ -1,0 +1,47 @@
+.nav-link {
+    color: black; /* Цвет обычного текста */
+    text-decoration: none; /* Убираем подчеркивание */
+  }
+  
+  .nav-link.active {
+    color: white; /* Цвет активного текста */
+    background-color: rgba(255, 255, 255, 0.2); /* Фон для активной ссылки */
+    border-radius: 5px; /* Закругление углов */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Эффект свечения */
+  }
+  .nav-link {
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .nav-icon {
+    width: 35px; /* Увеличенный размер иконок */
+    height: 35px;
+  }
+  
+  .nav-text {
+    font-size: 16px; /* Увеличенный размер текста */
+  }
+  
+  /* Адаптивные стили */
+  @media (max-width: 768px) {
+    .nav-icon {
+      width: 30px; /* Увеличенный размер иконок для мобильных устройств */
+      height: 30px;
+    }
+  
+    .nav-text {
+      font-size: 14px; /* Увеличенный размер текста для мобильных устройств */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .nav-icon {
+      width: 25px; /* Увеличенный размер для очень маленьких экранов */
+      height: 25px;
+    }
+  
+    .nav-text {
+      font-size: 12px; /* Увеличенный размер текста для маленьких экранов */
+    }
+  }
