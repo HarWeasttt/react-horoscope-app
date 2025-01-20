@@ -8,14 +8,19 @@ export default class Home extends Component {
     super(props);
     this.state = {
       expandedQuestions: {},
+      questions: [
+        { id: 1, question: "Что такое жизнь?", answer: "Жизнь — это сложный процесс." },
+        { id: 2, question: "Каковы цели жизни?", answer: "Цели жизни могут быть различными." },
+        // Добавьте больше вопросов по необходимости
+      ],
     };
   }
 
-  toggleExpand = (question) => {
+  toggleExpand = (id) => {
     this.setState((prevState) => ({
       expandedQuestions: {
         ...prevState.expandedQuestions,
-        [question]: !prevState.expandedQuestions[question],
+        [id]: !prevState.expandedQuestions[id],
       },
     }));
   };
@@ -29,7 +34,7 @@ export default class Home extends Component {
         question: userQuestion,
       });
       const answer = response.data.answer;
-      alert(answer); // или обновите состояние компонента
+      alert(answer);
     } catch (error) {
       console.error('Error asking question:', error);
       alert('Произошла ошибка при отправке вопроса.');
@@ -37,7 +42,7 @@ export default class Home extends Component {
   };
 
   render() {
-    const { expandedQuestions } = this.state;
+    const { expandedQuestions, questions } = this.state;
 
     return (
       <Container fluid style={{ backgroundColor: '#343a40', color: '#ffffff', height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -48,7 +53,14 @@ export default class Home extends Component {
             </Col>
           </Row>
 
-          {/* Остальной код */}
+          {questions.map(({ id, question, answer }) => (
+            <Row key={id} className="mb-2">
+              <Col>
+                <Button variant="link" onClick={() => this.toggleExpand(id)}>{question}</Button>
+                {expandedQuestions[id] && <p>{answer}</p>}
+              </Col>
+            </Row>
+          ))}
         </div>
 
         <Row style={{ position: 'sticky', bottom: '0', backgroundColor: '#343a40', padding: '1em 0' }} className='mb-5 pb-5'>

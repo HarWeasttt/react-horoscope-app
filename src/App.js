@@ -16,26 +16,33 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // Проверка, доступен ли Telegram Web App API
-    if (window.Telegram && window.Telegram.WebApp) {
-      const chat = window.Telegram.WebApp.getChat();
-      setChatId(chat.id); // Получаем chatId
-    }
-
     const fetchUserData = async () => {
       if (chatId) {
-        const response = await axios.post('/api/user', { chatId });
-        if (response.data.exists) {
-          setUserData(response.data.user);
+        try {
+          const response = await axios.post('/api/user', { chatId });
+          if (response.data.exists) {
+            setUserData(response.data.user);
+          }
+        } catch (error) {
+          console.error('Ошибка при загрузке данных пользователя:', error);
         }
       }
     };
 
-    fetchUserData();
+    if (window.Telegram && window.Telegram.WebApp) {
+      const chat = window.Telegram.WebApp.getChat();
+      setChatId(chat.id); // Получаем chatId
+      fetchUserData(); // Загружаем данные пользователя
+    }
   }, [chatId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.name || !formData.birthDate || !formData.zodiac) {
+      setErrorMessage('Пожалуйста, заполните все поля.');
+      return;
+    }
+
     try {
       const response = await axios.post('/api/user/create', { chatId, ...formData });
       setUserData(response.data.user);
@@ -43,8 +50,10 @@ const App = () => {
     } catch (error) {
       if (error.response) {
         setErrorMessage(error.response.data.message);
+      } else if (error.request) {
+        setErrorMessage('Сервер не ответил. Пожалуйста, попробуйте позже.');
       } else {
-        setErrorMessage('Ошибка сервера');
+        setErrorMessage('Ошибка: ' + error.message);
       }
     }
   };
@@ -89,7 +98,6 @@ const App = () => {
                       className="form-select" 
                       onChange={(e) => setFormData({ ...formData, zodiac: e.target.value })}>
                       <option value="">Выберите знак зодиака</option>
-                      {/* Добавьте знаки зодиака */}
                       <option value="Овен">Овен</option>
                       <option value="Телец">Телец</option>
                       <option value="Близнецы">Близнецы</option>
